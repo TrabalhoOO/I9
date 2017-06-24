@@ -8,7 +8,7 @@ Temas: default, bootstrap
 Temas bootswatch: cosmo, cyborg, darkly, journal, readable, sandstone, simplex, slate, superhero, yeti
 Mais temas em http://bootswatch.com/
 */
-define('TWITTER_BOOTSTRAP_TEMA', 'darkly');
+define('TWITTER_BOOTSTRAP_TEMA', 'readable');
 
 define('BD_HOST', 'localhost');
 define('BD_USUARIO', 'root');

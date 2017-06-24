@@ -14,8 +14,8 @@ else {
   $idproduto = (int) $_GET['idproduto'];
 }
 
-$sql = "Select * From produto
-Where (idproduto = $idproduto)";
+$sql = "Select * From produto_estoque
+Where (id_produto = $idproduto)";
 
 $r = mysqli_query($con, $sql);
 
