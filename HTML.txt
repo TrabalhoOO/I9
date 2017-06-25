@@ -1,9 +1,11 @@
 <label for="fdescricao">Fornecedor</label>
-                <div class="form-inline">
-                    <div class="form-group ">
+                <div class="form-group row">
+                    <div class="col-xs-2 ">
 
-                        <input type="text" class="form-control" id="fornecedor" name="fornecedor" placeholder="Fornecedor do produto" >
+                        <input type="text" class="form-control" id="fornecedor" name="fornecedor" placeholder="ID" disabled >
+                    </div>
+                    <div class="col-xs-8 ">
                         <input type="text" class="form-control" id="nomefornecedor" name="nome_fornecedor" placeholder="Fornecedor do produto" >
+
                     </div>
                 </div>
-				
