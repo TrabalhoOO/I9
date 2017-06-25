@@ -1,96 +1,91 @@
 <?php
+require_once './protege.php';
+require_once './config.php';
+require_once './lib/funcoes.php';
+require_once './lib/conexao.php';
 
-require './protege.php';
-require './config.php';
-require './lib/funcoes.php';
-require './lib/conexao.php';
+if ($_POST) {
+    $sql = "select * from pessoa as p inner join cliente as c on p.id_pessoa = c.fk_pessoa inner join cidade as cid on c.FK_cidade = cid.id_Cidade ";
 
-$q ='';
-if(isset($_GET['q'])){
-  $q =trim($_GET['q']);
-}
-?>
-<!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Clientes</title>
-
-    <?php headCss(); ?>
-  </head>
-  <body>
-
-<?php
-        criarNav($_SESSION['tipo']);
-        
-        ?>
-
-<div class="container">
-
-<div class="page-header">
-  <h1><i class="fa fa-heart"></i> Clientes</h1>
-</div>
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Clientes</h3>
-  </div>
-  <div class="panel-body">
-    <form class="form-inline" role="form" method="get" action="">
-      <div class="form-group">
-        <label class="sr-only" for="fq">Pesquisa</label>
-        <input type="search" class="form-control" id="fq" name="q" placeholder="Pesquisa" value="<?php echo $q; ?>">
-      </div>
-      <button type="submit" class="btn btn-default">Pesquisar</button>
-    </form>
-  </div>
-
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th></th>
-        <th>Nome</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-        $sql = "select * from cliente";
-        if($q != ''){
-          $sql .= " where nome like '%$q%'"; 
-        }
-      
-        $consulta = mysqli_query($con,$sql);
-        while( $resultado = mysqli_fetch_assoc($consulta)){
-      ?>
-      <tr>
-        <td><?php echo $resultado['idcliente'];   ?></td>
-        <td>
-          <?php if($resultado['ativo'] == CLIENTE_ATIVO){  ?>
-          <span class="label label-success">ativo</span>
-          <?php } else { ?>
-          <span class="label label-warning">inativo</span>
-          <?php } ?>
-        </td>
-        <td><?php echo $resultado['nome']; ?></td>
-        <td>
-          <a href="clientes-editar.php?idcliente=<?php echo $resultado['idcliente'];?>" title="Editar cliente"><i class="fa fa-edit fa-lg"></i></a>
-          <a href="clientes-apagar.php?idcliente=<?php echo $resultado['idcliente'];?>" title="Remover cliente"><i class="fa fa-times fa-lg"></i></a>
-          <a href="venda-nova.php?idcliente=<?php echo $resultado['idcliente'];?>" title="Nova Venda"><i class="fa fa-share fa-lg"></i></a>
-        </td>
-      </tr><?php
+    if (isset($_POST['estado']) && $_POST['estado'] != 'Todos') {
+        $sql .= "WHERE estado = :estado ";
     }
-      ?>
-    </tbody>
-  </table>
-</div>
+    if (isset($_POST['ordenar']) && $_POST['ordenar'] == 'cliente') {
+        $sql .= "Order BY nome ";
+    }
 
-</div>
+    if (isset($_POST['ordenar']) && $_POST['ordenar'] == 'estado') {
+        $sql .= "Order BY cidade,estado";
+    }
+    if ($stmt = $conn->prepare($sql)) {
 
-<script src="./lib/jquery.js"></script>
-<script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+        if (isset($_POST['estado']) && $_POST['estado'] != 'Todos') {
+            $stmt->bindParam(":estado", $_POST['estado']);
+        }
+        $stmt->execute();
+    }
+    ?>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Clientes</title>
 
-  </body>
+            <?php headCss(); ?>
+        </head>
+        <body>
+
+            <?php
+            criarNav($_SESSION['tipo']);
+            ?>
+            <div class="container">
+
+                <div class="page-header">
+                    <h1><i class="fa fa-user"></i> Cliente</h1>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Clientes</h3>
+                    </div>
+
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>E-mail</th>
+                                <th>Ponto de Referência</th>
+                                <th>Cidade</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            while ($cliente = $stmt->fetchObject()) {
+                                ?>
+                                <tr class="linha">
+                                    <td><?php echo $cliente->id_pessoa; ?></td>
+                                    <td><?php echo $cliente->nome; ?></td>
+                                    <td><?php echo $cliente->telefone; ?></td>
+                                    <td><?php echo $cliente->email ?></td>
+                                    <td><?php echo $cliente->ponto_ref_entrega ?></td>
+                                    <td><?php echo $cliente->cidade ?></td>
+                                    <td><?php echo Estados($cliente->estado) ?></td>
+                                </tr><?php
+                    }
+                }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn btn-success" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
+        </div>
+
+        <script src="./lib/jquery.js"></script>
+        <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+
+    </body>
 </html>

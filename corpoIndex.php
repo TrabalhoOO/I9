@@ -34,7 +34,8 @@
                     <i class="fa fa-bar-chart-o fa-lg"></i>  Relatórios <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="rel-clientes.php">Clientes</a></li>
+                    <li><a href="rel_cliente.php">Clientes</a></li>
+                    <li><a href="rel_cliente.php">Fornecedores</a></li>
                     <li><a href="rel-produtos.php">Produtos</a></li>
                     <li><a href="rel-vendas.php">Vendas</a></li>
                 </ul>

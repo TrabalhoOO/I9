@@ -1,0 +1,9 @@
+<label for="fdescricao">Fornecedor</label>
+                <div class="form-inline">
+                    <div class="form-group ">
+
+                        <input type="text" class="form-control" id="fornecedor" name="fornecedor" placeholder="Fornecedor do produto" >
+                        <input type="text" class="form-control" id="nomefornecedor" name="nome_fornecedor" placeholder="Fornecedor do produto" >
+                    </div>
+                </div>
+				

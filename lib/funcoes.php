@@ -12,7 +12,10 @@ function headCss() {
     <?php headCssTema(TWITTER_BOOTSTRAP_TEMA); ?>
 
     <link href="./lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="./lib/estilos.css" rel="stylesheet"><?php
+    <link href="./lib/estilos.css" rel="stylesheet">
+    <link href="./lib/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
+        
+        <?php
 }
 
 function headCssTema($tema = null) {
@@ -50,10 +53,10 @@ function headCssTema($tema = null) {
  * @param string $url Url para redirecionar o usuario
  * @param boolean $fim Se true, a funcao executa um exit
  */
-function javascriptAlert($msg, $url = null, $fim = false) {
+function javascriptAlert($url = null, $fim = false) {
     ?><script>
     <?php if (null !== $url) { ?>
-                    window.location = '<?php echo $url; ?>';
+            window.location = '<?php echo $url; ?>';
     <?php } ?>
     </script><?php
     if ($fim) {
@@ -69,7 +72,7 @@ function javascriptAlert($msg, $url = null, $fim = false) {
  * @param string $msg Mensagem para o usuario
  * @param string $url Url para redirecionar o usuario
  */
-function javascriptAlertFim( $url = null) {
+function javascriptAlertFim($url = null) {
     ?>
     <!DOCTYPE html>
     <html>
@@ -105,26 +108,43 @@ function msgHtml($msg, $boxType = 'danger') {
     <?php
 }
 
-function criarNav($tipo){
-    if($tipo == 'gerente'){
-        include 'nav.php';
-    }
-    if($tipo == 'cliente' ){
-        include 'nav_cliente.php';
-        
-    }
-    
-    
+function Estados($ufs) {
+    $estadosBrasileiros = array('AC' => 'Acre','AL' => 'Alagoas','AP' => 'Amapá','AM' => 'Amazonas','BA' => 'Bahia','CE' => 'Ceará','DF' => 'Distrito Federal','ES' => 'Espírito Santo','GO' => 'Goiás','MA' => 'Maranhão','MT' => 'Mato Grosso',
+        'MS' => 'Mato Grosso do Sul',
+        'MG' => 'Minas Gerais',
+        'PA' => 'Pará',
+        'PB' => 'Paraíba',
+        'PR' => 'Paraná',
+        'PE' => 'Pernambuco',
+        'PI' => 'Piauí',
+        'RJ' => 'Rio de Janeiro',
+        'RN' => 'Rio Grande do Norte',
+        'RS' => 'Rio Grande do Sul',
+        'RO' => 'Rondônia',
+        'RR' => 'Roraima',
+        'SC' => 'Santa Catarina',
+        'SP' => 'São Paulo',
+        'SE' => 'Sergipe',
+        'TO' => 'Tocantins'
+    );
+    $uf=(string)$ufs;
+    return $estadosBrasileiros[$uf];
 }
 
-function criarConteudo($tipo){
-    if($tipo == 'gerente'){
+function criarNav($tipo) {
+    if ($tipo == 'gerente') {
+        include 'nav.php';
+    }
+    if ($tipo == 'cliente') {
+        include 'nav_cliente.php';
+    }
+}
+
+function criarConteudo($tipo) {
+    if ($tipo == 'gerente') {
         include 'corpoIndex.php';
     }
-    if($tipo == 'cliente' ){
+    if ($tipo == 'cliente') {
         include 'corpoIndex_cliente.php';
-        
     }
-    
-    
 }

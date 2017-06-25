@@ -28,7 +28,7 @@ Inner Join usuario u
 Where
     (v.idvenda = $idvenda)
     And (v.status = " . VENDA_FECHADA . ")";
-$consulta = mysqli_query($con, $sql);
+$consulta = mysqli_query($conn, $sql);
 $venda = mysqli_fetch_assoc($consulta);
 
 if (!$venda) {
@@ -87,7 +87,7 @@ From vendaitem v
 Inner Join produto p
 	On (p.idproduto = v.idproduto)
 Where (v.idvenda = $idvenda)";
-        $consulta = mysqli_query($con, $sql);
+        $consulta = mysqli_query($conn, $sql);
         
         $vendaTotal = 0;
         

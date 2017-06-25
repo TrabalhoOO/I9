@@ -25,7 +25,6 @@ if (isset($_GET['q'])) {
         <?php
         criarNav($_SESSION['tipo']);
         ?>
-
         <div class="container">
 
             <div class="page-header">
@@ -45,7 +44,13 @@ if (isset($_GET['q'])) {
                         <button type="submit" class="btn btn-default">Pesquisar</button>
                     </form>
                 </div>
-
+                <?php
+                if (isset($_SESSION['retorno_cadastro']) && $_SESSION['retorno_cadastro'] == TRUE) {
+                    $msg = 'Produto ' . $_SESSION['produto_cadastrado'] . ' cadastrado com sucesso';
+                    msgHtml($msg, "success");
+                }
+                $_SESSION['retorno_cadastro'] = false;
+                ?>
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -66,15 +71,15 @@ if (isset($_GET['q'])) {
                         if ($q != '') {
                             $sql .= "WHERE nome like :id_produto ";
                         }
-                       
+
                         if ($stmt = $conn->prepare($sql)) {
 
                             if ($q != null) {
-                                $like = "%".$q."%";
-                                $stmt->bindParam(":id_produto",$like);
+                                $like = "%" . $q . "%";
+                                $stmt->bindParam(":id_produto", $like);
                             }
                             $stmt->execute();
-                            while ($produto=$stmt->fetchObject()) {
+                            while ($produto = $stmt->fetchObject()) {
                                 ?>
                                 <tr class="linha">
                                     <td><?php echo $produto->id_produto; ?></td>
@@ -82,22 +87,23 @@ if (isset($_GET['q'])) {
                                     <td><?php echo $produto->descricao; ?></td>
                                     <td class="quantidade"><?php echo $produto->qntd_total ?></td>
                                     <td><?php echo number_format($produto->custo_final, 2); ?></td>
-                                    <td><?php echo number_format($produto->valor_sugerido,2); ?></td>
-                                    <td><?php echo number_format($produto->preco_venda,2); ?></td>
+                                    <td><?php echo number_format($produto->valor_sugerido, 2); ?></td>
+                                    <td><?php echo number_format($produto->preco_venda, 2); ?></td>
                                     <td>
                                         <a href="produtos-editar.php?idproduto=<?php echo $produto->id_produto; ?>" title="Editar produto"><i class="fa fa-edit fa-lg"></i></a>
                                         <a href="produtos-apagar.php?idproduto=<?php echo $produto->id_produto; ?>" title="Remover produto"><i class="fa fa-times fa-lg"></i></a>
                                     </td>
                                 </tr><?php
-                    }
-                }
+                            }
+                        }
                         ?>
                     </tbody>
                 </table>
             </div>
+            <button type="button" class="btn btn-success" onclick="window.location = 'produtos-cadastrar.php'"><span class="fa fa-plus-circle fa-lg" ></span> Novo Produto</button>
 
         </div>
-
+        
         <script src="./lib/jquery.js"></script>
         <script src="./lib/funcoes.js"></script>
         <script src="./lib/bootstrap/js/bootstrap.min.js"></script>

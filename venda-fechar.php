@@ -18,7 +18,7 @@ From venda
 Where
     (idvenda = $idvenda)
     And (status = " . VENDA_ABERTA . ")";
-$consulta = mysqli_query($con, $sql);
+$consulta = mysqli_query($conn, $sql);
 $venda = mysqli_fetch_assoc($consulta);
 
 if (!$venda) {
@@ -29,7 +29,7 @@ if (!$venda) {
 // Fechar venda
 $sql = "Update venda Set status=" . VENDA_FECHADA
         . " Where (idvenda = $idvenda)";
-mysqli_query($con, $sql);
+mysqli_query($conn, $sql);
 unset($_SESSION['idvenda']);
 
 // Redirecionar usuario para vendas.php

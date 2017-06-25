@@ -14,7 +14,7 @@ Where
   (idvenda = $idvenda)
   And (status = '" . VENDA_ABERTA . "')
 ";
-$consulta = mysqli_query($con, $sql);
+$consulta = mysqli_query($conn, $sql);
 $venda = mysqli_fetch_assoc($consulta);
 if (!$venda) {
   // Nao encontrou a venda

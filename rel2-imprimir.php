@@ -76,7 +76,7 @@ exit;
     </thead>
     <tbody>
         <?php
-        $consulta = mysqli_query($con,$sql);
+        $consulta = mysqli_query($conn,$sql);
         while($resultado = mysqli_fetch_assoc($consulta)){
           $vendaData = strtotime($resultado['data']);
           $vendaDifValores = 0;

@@ -28,7 +28,7 @@ Inner Join usuario u
 Where
     (v.idvenda = $idvenda)
     And (v.status = " . VENDA_ABERTA . ")";
-$consulta = mysqli_query($con, $sql);
+$consulta = mysqli_query($conn, $sql);
 $venda = mysqli_fetch_assoc($consulta);
 
 if (!$venda) {
@@ -53,7 +53,7 @@ if ($acao == 1) {
     $idproduto = (int) $_POST['idproduto'];
     
     $sql = "Select * From produto Where (idproduto = $idproduto)";
-    $consulta = mysqli_query($con, $sql);
+    $consulta = mysqli_query($conn, $sql);
     $produto = mysqli_fetch_assoc($consulta);
     
     $precoProduto = $produto['preco'];
@@ -64,13 +64,13 @@ if ($acao == 1) {
 (idproduto, idvenda, preco, precopago, qtd)
 VALUES
 ($idproduto, $idvenda, $precoProduto, $precoPago, $qtd)";
-    $inserir = mysqli_query($con, $sql);
+    $inserir = mysqli_query($conn, $sql);
     
     if ($inserir) {
         $msgOk[] = "Adicionado $qtd x " . $produto['produto'];
     }
     else {
-        $msgAviso[] = "Erro para inserir o produto na venda: " . mysqli_error($con);
+        $msgAviso[] = "Erro para inserir o produto na venda: " . mysqli_error($conn);
     }
 }
 
@@ -78,7 +78,7 @@ if ($acao == 2) {
     $idproduto = (int) $_GET['idproduto'];
     
     $sql = "Delete From vendaitem Where (idproduto = $idproduto)";
-    $consulta = mysqli_query($con, $sql);
+    $consulta = mysqli_query($conn, $sql);
     
     $msgOk[] = "Produto removido da venda";
 }
@@ -130,7 +130,7 @@ if ($acao == 2) {
                 <option value="">Selecione um produto</option>
                 <?php
                 $sql = 'Select * From produto Where status=' . PRODUTO_ATIVO;
-                $result = mysqli_query($con,$sql);
+                $result = mysqli_query($conn,$sql);
                 while($linha = mysqli_fetch_assoc($result)) {
                 ?>
                 <option value="<?php echo $linha['idproduto']; ?>"><?php echo $linha['produto'];?> (R$ <?php echo number_format($linha['preco'], 2, ",", "."); ?>)</option>
@@ -194,7 +194,7 @@ From vendaitem v
 Inner Join produto p
 	On (p.idproduto = v.idproduto)
 Where (v.idvenda = $idvenda)";
-        $consulta = mysqli_query($con, $sql);
+        $consulta = mysqli_query($conn, $sql);
         
         $vendaTotal = 0;
         

@@ -11,7 +11,8 @@ require './lib/conexao.php';
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Sistema de Vendas</title>
 
-        <?php unset($_COOKIE);headCss(); ?>
+        <?php
+        headCss(); ?>
     </head>
     <body>
 

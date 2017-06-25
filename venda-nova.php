@@ -18,7 +18,7 @@ From venda
 Where
   (idcliente = $idcliente)
   And (status = " . VENDA_ABERTA . ")";
-$consulta = mysqli_query($con, $sql);
+$consulta = mysqli_query($conn, $sql);
 $venda = mysqli_fetch_assoc($consulta);
 if ($venda) {
   // Existe outra venda
@@ -35,10 +35,10 @@ $sql = "Insert into venda
 (data, idcliente, status, idusuario)
 Values
 ('$data', $idcliente, $status, $idusuario)";
-$result = mysqli_query($con, $sql);
+$result = mysqli_query($conn, $sql);
 
 //Pegar o codigo da venda
-$idvenda = mysqli_insert_id($con);
+$idvenda = mysqli_insert_id($conn);
 
 //Salvar codigo da venda em sessao
 $_SESSION['idvenda'] = $idvenda;
