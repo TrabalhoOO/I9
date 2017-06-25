@@ -9,18 +9,19 @@ if ($_POST) {
     // $senha = md5('0409'.$senha);
     $tipo = $_POST['tipo'];
     if ($tipo == "gerente") {
-        $mysqli = "select * from gerente
+        $sql = "select * from gerente
         inner join pessoa on gerente.FK_pessoa = pessoa.id_pessoa
-        where (senha = '$senha') and (email = '$email')";
-        $consulta = mysqli_query($con, $mysqli);
-        if ($consulta != NULL) {
-            $resultado = mysqli_fetch_assoc($consulta);
-
-            if ($resultado) {
+        where (senha = :senha) and (email = :email)";
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bindParam(":senha", $senha);
+            $stmt->bindParam(":email", $email);
+            $stmt->execute();
+            if ($stmt->rowCount() == 1) {
+                $resultado = $stmt->fetchObject();
                 session_start();
                 $_SESSION['logado'] = 1;
-                $_SESSION['nome'] = $resultado['nome'];
-                $_SESSION['id_pessoa'] = $resultado['id_pessoa'];
+                $_SESSION['nome'] = $resultado->nome;
+                $_SESSION['id_pessoa'] = $resultado->id_pessoa;
                 $_SESSION['tipo'] = $tipo;
 
                 header('location:index.php');
@@ -29,28 +30,32 @@ if ($_POST) {
                 msgHtml("Email ou senha Inválidos");
             }
         }
+        $con->close();
     }
     if ($tipo == "cliente") {
-        $mysqli = "select * from cliente
+        $sql = "select * from cliente
         inner join pessoa on cliente.FK_pessoa = pessoa.id_pessoa
-        where (senha = '$senha') and (email = '$email')";
+        where (senha = :senha) and (email = :email)";
 
-        $consulta = mysqli_query($con, $mysqli);
-        if ($consulta != NULL) {
-            $resultado = mysqli_fetch_assoc($consulta);
-
-            if ($resultado) {
+         if ($stmt = $conn->prepare($sql)) {
+            $stmt->bindParam(":senha", $senha);
+            $stmt->bindParam(":email", $email);
+            $stmt->execute();
+            if ($stmt->rowCount() == 1) {
+                $resultado = $stmt->fetchObject();
                 session_start();
                 $_SESSION['logado'] = 1;
-                $_SESSION['nome'] = $resultado['nome'];
-                $_SESSION['id_pessoa'] = $resultado['id_pessoa'];
+                $_SESSION['nome'] = $resultado->nome;
+                $_SESSION['id_pessoa'] = $resultado->id_pessoa;
                 $_SESSION['tipo'] = $tipo;
+
                 header('location:index.php');
                 exit;
+            } else {
+                msgHtml("Email ou senha Inválidos");
             }
-        } else {
-           msgHtml("Email ou senha Inválidos");
         }
+        $con->close();
     }
 }
 ?>
@@ -113,13 +118,13 @@ if ($_POST) {
                 </div>
             </div>
 
-           <!-- <div class="row">
-                <div class="col-xs-12">
-                    <div class="alert alert-info" role="alert">
-                        <strong>Email/Senha padrão:</strong> admin@admin.com/unipar
-                    </div>
-                </div>
-            </div>-->
+            <!-- <div class="row">
+                 <div class="col-xs-12">
+                     <div class="alert alert-info" role="alert">
+                         <strong>Email/Senha padrão:</strong> admin@admin.com/unipar
+                     </div>
+                 </div>
+             </div>-->
 
         </div>
 

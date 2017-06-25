@@ -1,8 +1,8 @@
 <?php
-require './protege.php';
-require './config.php';
-require './lib/funcoes.php';
-require './lib/conexao.php';
+require_once './protege.php';
+require_once './config.php';
+require_once './lib/funcoes.php';
+require_once './lib/conexao.php';
 
 $idcategoria = 0;
 
@@ -64,30 +64,29 @@ if (isset($_GET['q'])) {
                         $sql = "Select id_produto, qntd_total, custo_final, valor_sugerido, preco_venda,nome,descricao from produto_estoque ";
 
                         if ($q != '') {
-                            $sql .= "WHERE nome like ? ";
+                            $sql .= "WHERE nome like :id_produto ";
                         }
-                        $con->prepare($sql);
-                        if ($stmt = $con->prepare($sql)) {
+                       
+                        if ($stmt = $conn->prepare($sql)) {
 
                             if ($q != null) {
                                 $like = "%".$q."%";
-                                $stmt->bind_param("s",$like);
+                                $stmt->bindParam(":id_produto",$like);
                             }
                             $stmt->execute();
-                            $stmt->bind_result($id_produto, $nome, $descricao, $quantidade, $custo, $valor_sugerido, $preco_venda);
-                            while ($stmt->fetch()) {
+                            while ($produto=$stmt->fetchObject()) {
                                 ?>
                                 <tr class="linha">
-                                    <td><?php echo $id_produto; ?></td>
-                                    <td><?php echo $nome; ?></td>
-                                    <td><?php echo $descricao; ?></td>
-                                    <td class="quantidade"><?php echo $quantidade ?></td>
-                                    <td><?php echo $custo; ?></td>
-                                    <td><?php echo $valor_sugerido ?></td>
-                                    <td><?php echo $preco_venda ?></td>
+                                    <td><?php echo $produto->id_produto; ?></td>
+                                    <td><?php echo $produto->nome; ?></td>
+                                    <td><?php echo $produto->descricao; ?></td>
+                                    <td class="quantidade"><?php echo $produto->qntd_total ?></td>
+                                    <td><?php echo number_format($produto->custo_final, 2); ?></td>
+                                    <td><?php echo number_format($produto->valor_sugerido,2); ?></td>
+                                    <td><?php echo number_format($produto->preco_venda,2); ?></td>
                                     <td>
-                                        <a href="produtos-editar.php?idproduto=<?php echo $id_produto; ?>" title="Editar produto"><i class="fa fa-edit fa-lg"></i></a>
-                                        <a href="produtos-apagar.php?idproduto=<?php echo $id_produto; ?>" title="Remover produto"><i class="fa fa-times fa-lg"></i></a>
+                                        <a href="produtos-editar.php?idproduto=<?php echo $produto->id_produto; ?>" title="Editar produto"><i class="fa fa-edit fa-lg"></i></a>
+                                        <a href="produtos-apagar.php?idproduto=<?php echo $produto->id_produto; ?>" title="Remover produto"><i class="fa fa-times fa-lg"></i></a>
                                     </td>
                                 </tr><?php
                     }

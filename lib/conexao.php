@@ -1,10 +1,14 @@
 <?php
 
-$con = new mysqli(BD_HOST, BD_USUARIO, BD_SENHA, BD_NOME);
-
-if (!$con) {
-	echo '<h1>Erro para conectar no banco de dados.</h1>';
-	exit;
+try {
+    $conn = new PDO("mysql:host=".BD_HOST.";port=".BD_PORTA.";dbname=".BD_NOME."",BD_USUARIO,BD_SENHA);
+    $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+    $conn->exec("SET NAMES'utf8'");
+    $conn->exec('SET character_set_connection=utf8');
+    $conn->exec('SET character_set_client=utf8');
+    $conn->exec('SET character_set_results=utf8');
+    //echo 'Conectado com Sucesso!';
+}catch(PDOException $e){ 
+    //var_dump($e);
+    echo $e->getMessage();
 }
-
-mysqli_set_charset($con, 'utf8');

@@ -14,6 +14,7 @@ define('BD_HOST', 'localhost');
 define('BD_USUARIO', 'root');
 define('BD_SENHA', '1234');
 define('BD_NOME', 'trabalho');
+define('BD_PORTA','3306');
 
 define('CATEGORIA_INATIVO', '0');
 define('CATEGORIA_ATIVO', '1');

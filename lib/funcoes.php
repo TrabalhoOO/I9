@@ -52,7 +52,6 @@ function headCssTema($tema = null) {
  */
 function javascriptAlert($msg, $url = null, $fim = false) {
     ?><script>
-                window.alert('<?php echo $msg; ?>');
     <?php if (null !== $url) { ?>
                     window.location = '<?php echo $url; ?>';
     <?php } ?>
@@ -70,7 +69,7 @@ function javascriptAlert($msg, $url = null, $fim = false) {
  * @param string $msg Mensagem para o usuario
  * @param string $url Url para redirecionar o usuario
  */
-function javascriptAlertFim($msg, $url = null) {
+function javascriptAlertFim( $url = null) {
     ?>
     <!DOCTYPE html>
     <html>
@@ -79,7 +78,7 @@ function javascriptAlertFim($msg, $url = null) {
             <meta charset="utf-8">
         </head>
         <body>
-            <?php javascriptAlert($msg, $url, false); ?>
+            <?php javascriptAlert($url, false); ?>
         </body>
     </html>
     <?php
