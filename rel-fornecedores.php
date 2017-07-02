@@ -4,33 +4,20 @@ require_once './config.php';
 require_once './lib/funcoes.php';
 require_once './lib/conexao.php';
 
-if ($_POST) {
-    $sql = "select * from pessoa as p inner join cliente as c on p.id_pessoa = c.fk_pessoa inner join cidade as cid on c.FK_cidade = cid.id_Cidade ";
+    $sql = "select * from pessoa as p inner join fornecedor as f on p.id_pessoa = f.FK_pessoa";
 
-    if (isset($_POST['estado']) && $_POST['estado'] != 'Todos') {
-        $sql .= "WHERE estado = :estado ";
-    }
-    if (isset($_POST['ordenar']) && $_POST['ordenar'] == 'cliente') {
-        $sql .= "Order BY nome ";
-    }
-
-    if (isset($_POST['ordenar']) && $_POST['ordenar'] == 'estado') {
-        $sql .= "Order BY cidade,estado";
-    }
     if ($stmt = $conn->prepare($sql)) {
 
-        if (isset($_POST['estado']) && $_POST['estado'] != 'Todos') {
-            $stmt->bindParam(":estado", $_POST['estado']);
-        }
         $stmt->execute();
     }
+
     ?>
     <!DOCTYPE html>
     <html lang="pt-br">
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Clientes</title>
+            <title>Fornecedores</title>
 
             <?php headCss(); ?>
         </head>
@@ -42,12 +29,12 @@ if ($_POST) {
             <div class="container">
 
                 <div class="page-header">
-                    <h1><i class="fa fa-user"></i> Clientes</h1>
+                    <h1><i class="fa fa-truck"></i> Fornecedores</h1>
                 </div>
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Clientes</h3>
+                        <h3 class="panel-title">Fornecedores</h3>
                     </div>
 
                     <table class="table table-striped table-hover">
@@ -55,28 +42,27 @@ if ($_POST) {
                             <tr>
                                 <th>Nome</th>
                                 <th>Telefone</th>
+                                <th>Telefone 1</th>
+                                <th>Telefone 2</th>
                                 <th>E-mail</th>
-                                <th>Endereço</th>
-                                <th>Ponto de Referência</th>
-                                <th>Cidade</th>
-                                <th>Estado</th>
+                                <th>CNPJ</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            while ($cliente = $stmt->fetchObject()) {
+                            while ($fornecedor= $stmt->fetchObject()) {
                                 ?>
                                 <tr class="linha">
-                                    <td><?php echo $cliente->nome; ?></td>
-                                    <td><?php echo $cliente->telefone; ?></td>
-                                    <td><?php echo $cliente->email ?></td>
-                                    <td><?php echo $cliente->rua. ", ".$cliente->numero ?></td>
-                                    <td><?php echo $cliente->ponto_ref_entrega ?></td>
-                                    <td><?php echo $cliente->cidade ?></td>
-                                    <td><?php echo Estados($cliente->estado) ?></td>
+                                    <td><?php echo $fornecedor->nome; ?></td>
+                                    <td><?php echo $fornecedor->telefone; ?></td>
+                                    <td><?php if($fornecedor->telefone2 != "") {echo $fornecedor->telefone2;} else {echo "Não cadastrado";} ?></td>
+                                    <td><?php if($fornecedor->telefone3 != "") {echo $fornecedor->telefone3;} else {echo "Não cadastrado";} ?></td>
+                                    <td><?php echo $fornecedor->email ?></td>
+                                    <td><?php echo $fornecedor->CNPJ ?></td>
                                 </tr><?php
                     }
-                }
+                
                         ?>
                     </tbody>
                 </table>

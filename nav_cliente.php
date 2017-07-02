@@ -15,6 +15,7 @@
         <li><a href="./">Home</a></li>
         <li><a href="venda-nova.php">Iniciar Compra</a></li>
         <li><a href="vendas.php">Compras Realizadas</a></li>
+        <li><a href="rel_vendas.php">Relatório de Produtos Comprados por Data</a></li>
         <li><a href="logout.php">Sair</a></li>
       </ul>
   </div>

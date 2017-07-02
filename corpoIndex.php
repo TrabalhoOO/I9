@@ -19,7 +19,7 @@
 
             <div class="btn-group">
                 <a class="btn btn-primary btn-lg" role="button" href="produtos.php">
-                    <i class="fa fa-headphones fa-lg"></i>  Produtos
+                    <i class="fa fa-shopping-cart fa-lg"></i>  Produtos
                 </a>
             </div>
 
@@ -35,9 +35,8 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="rel_cliente.php">Clientes</a></li>
-                    <li><a href="rel_cliente.php">Fornecedores</a></li>
-                    <li><a href="rel-produtos.php">Produtos</a></li>
-                    <li><a href="rel-vendas.php">Vendas</a></li>
+                    <li><a href="rel-fornecedores.php">Fornecedores</a></li>
+                    <li><a href="rel-produtos.php">Produtos em Baixa</a></li>
                 </ul>
             </div>
             </p>

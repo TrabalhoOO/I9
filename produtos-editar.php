@@ -97,7 +97,7 @@ if ($_POST) {
         <div class="container">
 
             <div class="page-header">
-                <h1><i class="fa fa-headphones"></i> Editar produtos</h1>
+                <h1><i class="fa fa-pencil"></i> Editar produtos</h1>
             </div>
 
             <?php
