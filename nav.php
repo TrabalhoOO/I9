@@ -25,9 +25,8 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Relatórios <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="rel_cliente.php">Clientes</a></li>
-                        <li><a href="rel_cliente.php">Fornecedores</a></li>
-                        <li><a href="rel-produtos.php">Produtos</a></li>
-                        <li><a href="rel-vendas.php">Vendas</a></li>
+                        <li><a href="rel-fornecedores.php">Fornecedores</a></li>
+                        <li><a href="rel-produtos.php">Produtos em Baixa</a></li>
                     </ul>
                 </li>
                 <li><a href="logout.php">Sair</a></li>

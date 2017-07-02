@@ -45,7 +45,6 @@ if (isset($_GET['q'])) {
                             <th>Custo</th>
                             <th>Valor Sugerido</th>
                             <th>Preço</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
