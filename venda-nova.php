@@ -5,44 +5,48 @@ require './config.php';
 require './lib/funcoes.php';
 require './lib/conexao.php';
 
-//pegar id cliente
-$idcliente = $_GET['idcliente'];
 
 //pegar id usuario
-$idusuario = $_SESSION['idusuario'];
+$idcliente = $_SESSION['id_pessoa'];
 
 // Verificar se existe uma venda aberta para $idcliente
 // Se existir não abrir outra venda
-$sql = "Select idvenda
-From venda
+$sql = "Select id_pedido
+From pedido
 Where
-  (idcliente = $idcliente)
-  And (status = " . VENDA_ABERTA . ")";
-$consulta = mysqli_query($conn, $sql);
-$venda = mysqli_fetch_assoc($consulta);
-if ($venda) {
-  // Existe outra venda
-  header('location:venda-continuar.php?idvenda=' . $venda['idvenda']);
-  exit;
+  (id_cli = :idpessoa)
+  And (fechada = " . VENDA_ABERTA . ")";
+if ($stmt = $conn->prepare($sql)) {
+
+    $stmt->bindParam(":idpessoa", $idcliente);
+
+    $stmt->execute();
+    $venda = $stmt->fetchObject();
+    if ($venda) {
+        // Existe outra venda
+        $idvenda = $_SESSION['idvenda'] = $venda->id_pedido;
+        header('location:venda-produto.php?idvenda='.$idvenda);
+        exit;
+    }
 }
 
 // Criar uma venda
 //Criar um registro na tabela venda
-$data = date('Y-m-d');
-$status = VENDA_ABERTA;
+    $data = date('Y-m-d');
 
-$sql = "Insert into venda
-(data, idcliente, status, idusuario)
+    $sql = "Insert into pedido
+(data,id_cli,valorTotal,fechada)
 Values
-('$data', $idcliente, $status, $idusuario)";
-$result = mysqli_query($conn, $sql);
+(:data, :id_cliente, 0, 0)";
 
-//Pegar o codigo da venda
-$idvenda = mysqli_insert_id($conn);
+    if ($stmt = $conn->prepare($sql)) {
 
-//Salvar codigo da venda em sessao
-$_SESSION['idvenda'] = $idvenda;
+        $stmt->bindParam(":data", $data);
+        $stmt->bindParam(":id_cliente", $idcliente);
 
-//Redirecionar usuario para venda-produto.php
-header('location:venda-produto.php');
+        $stmt->execute();
+        $idvenda = $conn->lastInsertId();
+        $_SESSION['idvenda'] = $idvenda;
 
+        header('location:venda-produto.php?idvenda=' . $idvenda);
+    }

@@ -81,7 +81,7 @@ if ($_POST) {
                     </tbody>
                 </table>
             </div>
-            <button type="button" class="btn btn-success" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
+            <button type="button" class="btn btn-success hidden-print" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
         </div>
 
         <script src="./lib/jquery.js"></script>
