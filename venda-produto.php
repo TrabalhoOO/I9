@@ -228,6 +228,7 @@ Where (v.FK_pedido = :venda)";
                         }
 
                         $vendaTotal = 0;
+
                             while ($produto = $result->fetchObject()) {
                             $total = $produto->quantidade * $produto->valorUnitario;
                             $vendaTotal += $total;

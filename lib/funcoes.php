@@ -14,8 +14,8 @@ function headCss() {
     <link href="./lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="./lib/estilos.css" rel="stylesheet">
     <link href="./lib/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet">
-        
-        <?php
+
+    <?php
 }
 
 function headCssTema($tema = null) {
@@ -56,7 +56,7 @@ function headCssTema($tema = null) {
 function javascriptAlert($url = null, $fim = false) {
     ?><script>
     <?php if (null !== $url) { ?>
-            window.location = '<?php echo $url; ?>';
+                window.location = '<?php echo $url; ?>';
     <?php } ?>
     </script><?php
     if ($fim) {
@@ -108,8 +108,26 @@ function msgHtml($msg, $boxType = 'danger') {
     <?php
 }
 
+function msgHtmlArray($msg, $boxType = 'danger') {
+    ?>
+
+    <div class="alert alert-<?php echo $boxType; ?> alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <ul>
+
+            <ul>
+                <?php foreach ($msg as $m) { ?>
+                    <li><?php echo $m; ?>;</li>
+                <?php } ?>
+            </ul>
+
+        </ul>
+    </div>
+    <?php
+}
+
 function Estados($ufs) {
-    $estadosBrasileiros = array('AC' => 'Acre','AL' => 'Alagoas','AP' => 'Amapá','AM' => 'Amazonas','BA' => 'Bahia','CE' => 'Ceará','DF' => 'Distrito Federal','ES' => 'Espírito Santo','GO' => 'Goiás','MA' => 'Maranhão','MT' => 'Mato Grosso',
+    $estadosBrasileiros = array('AC' => 'Acre', 'AL' => 'Alagoas', 'AP' => 'Amapá', 'AM' => 'Amazonas', 'BA' => 'Bahia', 'CE' => 'Ceará', 'DF' => 'Distrito Federal', 'ES' => 'Espírito Santo', 'GO' => 'Goiás', 'MA' => 'Maranhão', 'MT' => 'Mato Grosso',
         'MS' => 'Mato Grosso do Sul',
         'MG' => 'Minas Gerais',
         'PA' => 'Pará',
@@ -127,7 +145,7 @@ function Estados($ufs) {
         'SE' => 'Sergipe',
         'TO' => 'Tocantins'
     );
-    $uf=(string)$ufs;
+    $uf = (string) $ufs;
     return $estadosBrasileiros[$uf];
 }
 

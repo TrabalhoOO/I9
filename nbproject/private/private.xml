@@ -3,16 +3,28 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/wamp64/www/I9/consulta_fornecedor.php</file>
+            <file>file:/C:/wamp64/www/I9/corpoIndex_cliente.php</file>
             <file>file:/C:/wamp64/www/I9/produtos.php</file>
-            <file>file:/C:/wamp64/www/I9/produtos-editar.php</file>
-            <file>file:/C:/wamp64/www/I9/protege.php</file>
             <file>file:/C:/wamp64/www/I9/login.php</file>
-            <file>file:/C:/wamp64/www/I9/lib/conexao.php</file>
-            <file>file:/C:/wamp64/www/I9/index.php</file>
+            <file>file:/C:/wamp64/www/I9/venda-produto.php</file>
+            <file>file:/C:/wamp64/www/I9/venda-fechar.php</file>
             <file>file:/C:/wamp64/www/I9/lib/funcoes.php</file>
-            <file>file:/C:/wamp64/www/I9/produtos-cadastrar.php</file>
+            <file>file:/C:/wamp64/www/I9/rel_cliente.php</file>
+            <file>file:/C:/wamp64/www/I9/nav_cliente.php</file>
+            <file>file:/C:/wamp64/www/I9/rel_vendas.php</file>
+            <file>file:/C:/wamp64/www/I9/consulta_produtos.php</file>
+            <file>file:/C:/wamp64/www/I9/lib/autoComplete_fornecedor.js</file>
             <file>file:/C:/wamp64/www/I9/vendas.php</file>
-            <file>file:/C:/wamp64/www/I9/config.php</file>
+            <file>file:/C:/wamp64/www/I9/clientes.php</file>
+            <file>file:/C:/wamp64/www/I9/index.php</file>
+            <file>file:/C:/wamp64/www/I9/produtos-cadastrar.php</file>
+            <file>file:/C:/wamp64/www/I9/itens.php</file>
+            <file>file:/C:/wamp64/www/I9/lib/funcoes.js</file>
+            <file>file:/C:/wamp64/www/I9/venda-continuar.php</file>
+            <file>file:/C:/wamp64/www/I9/venda-nova.php</file>
+            <file>file:/C:/wamp64/www/I9/venda-detalhes.php</file>
+            <file>file:/C:/wamp64/www/I9/lib/buscaPreco.js</file>
         </group>
     </open-files>
 </project-private>
