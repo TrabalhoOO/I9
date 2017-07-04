@@ -25,7 +25,7 @@ if ($acao == 1) {
     $qtd = $_POST['qtd'];
     $fornecedor = $_POST['fornecedor'];
     $custo = $_POST['custoUnitario'];
-    $sql = "INSERT INTO fornecimento
+    $sql = "INSERT INTO fornecimento (FK_fornecedor, FK_estoqGlobal, dataEntrada, quantidade, custoUnitario)
             VALUES (:fornecedor, :produto, :dataEntrada, :qtd,:custoUnitario)";
     if ($stmt = $conn->prepare($sql)) {
 
@@ -200,7 +200,7 @@ Where (v.FK_pedido = :venda)";
                                 <td><?php echo $produto->nome; ?></td>
                                 <td>R$ <?php echo number_format($produto->valorUnitario, 2, ',', '.'); ?></td>
                                 <td>R$ <?php echo number_format($total, 2, ',', '.'); ?></td>
-                                <td><a href="venda-produto.php?acao=2&idproduto=<?php echo $produto->FK_estoqGlobal; ?>" title="Remover produto da venda"><i class="fa fa-times fa-lg"></i></a></td>
+                                <td><a href="fornecimento_produto.php?acao=2&idproduto=<?php echo $produto->FK_estoqGlobal; ?>" title="Remover produto da venda"><i class="fa fa-times fa-lg"></i></a></td>
                             </tr>
                         <?php } ?>
                     </tbody>
