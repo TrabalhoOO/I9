@@ -13,7 +13,7 @@
             
             <div class="btn-group">
                 <a class="btn btn-primary btn-lg" role="button" href="fornecimento.php">
-                    <i class="fa fa-headphones fa-lg"></i>  Fornecimentos
+                    <i class="fa fa-credit-card fa-lg"></i>  Fornecimentos
                 </a>
             </div>
 

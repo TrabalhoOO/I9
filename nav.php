@@ -20,6 +20,13 @@
                         <li><a href="produtos.php">Pesquisar produtos</a></li>
                     </ul>
                 </li>
+                 <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Fornecimentos <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="fornecimento_produto.php">Novo Fornecimento</a></li>
+                        <li><a href="fornecimento.php.php">Relatório de Fornecimentos</a></li>
+                    </ul>
+                </li>
                 <li><a href="vendas.php">Vendas Realizadas</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Relatórios <b class="caret"></b></a>

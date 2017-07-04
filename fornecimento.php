@@ -20,11 +20,17 @@ require './lib/conexao.php';
         ?>
 
         <div class="container">
-
+            
             <div class="page-header">
                 <h1><i class="fa fa-shopping-cart"></i> Fornecimento</h1>
             </div>
-
+            <?php
+            if (isset($_SESSION['fornecimento']) && $_SESSION['fornecimento'] == TRUE) {
+                $msg = 'Produto ' . $_SESSION['produto_fornecido'] . ' fornecido com sucesso';
+                msgHtml($msg, "success");
+            }
+            $_SESSION['fornecimento'] = false;
+            ?>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Fornecimentos</h3>
@@ -51,7 +57,7 @@ require './lib/conexao.php';
                                     from fornecimento f
                                     INNER JOIN fornecedor fr on f.FK_fornecedor = fr.FK_pessoa
                                     INNER JOIN pessoa p on fr.FK_pessoa = p.id_pessoa
-                                    INNER JOIN produto_estoque pe on f.FK_estoqGlobal = pe.id_produto";
+                                    INNER JOIN produto_estoque pe on f.FK_estoqGlobal = pe.id_produto order by f.dataEntrada";
 
                             if ($stmt = $conn->prepare($sql)) {
                                 $stmt->execute();
@@ -74,7 +80,8 @@ require './lib/conexao.php';
                 }
                 ?>
             </div>
-
+            <button type="button" class="btn btn-success hidden-print" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
+       
         </div>
 
         <script src="./lib/jquery.js"></script>
