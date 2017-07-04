@@ -1,0 +1,79 @@
+USE `trabalho`;
+
+DELIMITER $$
+CREATE TRIGGER RecalculoPrecoSugerido
+AFTER INSERT ON fornecimento
+FOR EACH ROW BEGIN
+  CALL PrecoSugerido(NEW.FK_estoqGlobal,@precoSugerido);
+  UPDATE produto_estoque SET produto_estoque.valor_sugerido = @precoSugerido WHERE produto_estoque.id_produto= NEW.FK_estoqGlobal;
+ END$$
+DELIMITER ;
+
+DROP procedure IF EXISTS `PrecoSugerido`;
+
+DELIMITER $$
+USE `trabalho`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PrecoSugerido`(IN id INT, INOUT resultado DOUBLE)
+BEGIN
+
+  -- Definição de variáveis utilizadas na Procedure
+  DECLARE existe_mais_linhas INT DEFAULT 0;
+  DECLARE preco DOUBLE;
+  DECLARE quant INT;
+  DECLARE precototal DOUBLE DEFAULT 0;
+  DECLARE totalpreco DOUBLE DEFAULT 0;
+  DECLARE totalquantidade DOUBLE DEFAULT 0;
+
+  -- Definição do cursor
+  DECLARE fornecimento_cursor CURSOR FOR 
+  SELECT custoUnitario,quantidade FROM fornecimento WHERE fornecimento.FK_estoqGlobal = id;
+
+  -- Definição da variável de controle de looping do cursor
+  DECLARE CONTINUE HANDLER 
+  FOR NOT FOUND SET existe_mais_linhas=1;
+
+  -- Abertura do cursor
+  OPEN fornecimento_cursor;
+
+  -- Looping de execução do cursor
+  meuLoop: LOOP
+  FETCH fornecimento_cursor INTO preco,quant;
+
+  -- Controle de existir mais registros na tabela
+  IF existe_mais_linhas = 1 THEN
+  LEAVE meuLoop;
+  END IF;
+
+  SET precototal = preco * quant;
+  SET totalpreco = totalpreco + precototal;
+  SET totalquantidade = totalquantidade + quant;
+
+  -- Retorna para a primeira linha do loop
+  END LOOP meuLoop;
+  CLOSE fornecimento_cursor;
+  SET resultado = (totalpreco/totalquantidade)*1.2;
+
+  END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER AtualizaQuantidadeTotalVenda
+AFTER INSERT ON itempedido
+FOR EACH ROW 
+BEGIN
+UPDATE produto_estoque SET produto_estoque.qntd_total = produto_estoque.qntd_total - NEW.quantidade WHERE produto_estoque.id_produto= NEW.FK_estoqGlobal;
+UPDATE pedido SET pedido.valorTotal = valorTotal+(NEW.quantidade * NEW.valorUnitario) WHERE pedido.id_pedito = NEW.FK_pedido;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER QuantidadeTotalVendaAD
+AFTER DELETE ON itempedido
+FOR EACH ROW 
+BEGIN
+UPDATE produto_estoque SET produto_estoque.qntd_total = produto_estoque.qntd_total + OLD.quantidade WHERE produto_estoque.id_produto= OLD.FK_estoqGlobal;
+UPDATE pedido SET pedido.valorTotal = valorTotal-(OLD.quantidade * OLD.valorUnitario) WHERE pedido.id_pedido = OLD.FK_pedido;
+END$$
+DELIMITER ;
