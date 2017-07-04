@@ -7,41 +7,6 @@ require './lib/conexao.php';
 $msgOk = array();
 $msgAviso = array();
 
-if (!isset($_SESSION['idvenda'])) {
-    header('location:vendas.php');
-    exit;
-}
-
-$idvenda = $_SESSION['idvenda'];
-$idcliente = $_SESSION['id_pessoa'];
-$sql = "Select
-	v.id_pedido,
-	v.data,
-        v.valorTotal,
-	p.nome clienteNome
-        
-From pedido v
-Inner Join cliente c
-	On (c.FK_pessoa = v.id_cli)
-Inner Join pessoa p
-	on(c.FK_pessoa = p.id_pessoa)
-Where
-    (v.id_pedido = $idvenda)
-    And (v.fechada = " . VENDA_ABERTA . ")"
-        . "AND (v.id_cli = :cliente)";
-if ($stmt = $conn->prepare($sql)) {
-
-    $stmt->bindParam(":cliente", $idcliente);
-
-    $stmt->execute();
-}
-$venda = $stmt->fetchObject();
-
-if (!$venda) {
-    header('location:vendas.php');
-    exit;
-}
-
 /*
   Valores para acao
   1 = Incluir produto na venda
@@ -56,37 +21,28 @@ if (isset($_GET['acao'])) {
 
 if ($acao == 1) {
     $idproduto = (int) $_POST['idproduto'];
-
-    $sql = "Select * From produto_estoque Where (id_produto = :produto)";
-    if ($stmt = $conn->prepare($sql)) {
-
-        $stmt->bindParam(":produto", $idproduto);
-
-        $stmt->execute();
-    }
-    $produto = $stmt->fetchObject();
-    $precoProduto = $produto->preco_venda;
+    $data = date('Y-m-d');
     $qtd = $_POST['qtd'];
-
-    $sql = "INSERT INTO itempedido
-(FK_estoqGlobal, FK_pedido, valorUnitario, quantidade)
-VALUES
-(:produto, :venda, :preco, :qtd)";
+    $fornecedor = $_POST['fornecedor'];
+    $custo = $_POST['custoUnitario'];
+    $sql = "INSERT INTO fornecimento
+            VALUES (:fornecedor, :produto, :dataEntrada, :qtd,:custoUnitario)";
     if ($stmt = $conn->prepare($sql)) {
 
+        $stmt->bindParam(":custoUnitario", $custo);
+        $stmt->bindParam(":dataEntrada", $data);
         $stmt->bindParam(":produto", $idproduto);
-        $stmt->bindParam(":venda", $idvenda);
-        $stmt->bindParam(":preco", $precoProduto);
         $stmt->bindParam(":qtd", $qtd);
+        $stmt->bindParam(":fornecedor", $fornecedor);
         $stmt->execute();
-    
 
-    if ($stmt->rowCount() > 0) {
-        $msgOk[] = "Adicionado $qtd x " . $produto->nome;
-    } else {
-        $msgAviso[] = "Erro para inserir o produto na venda: ";
+
+        if ($stmt->rowCount() > 0) {
+            $msgOk[] = "Adicionado $qtd x " . $produto->nome;
+        } else {
+            $msgAviso[] = "Erro para inserir o produto na venda: ";
+        }
     }
-}
 }
 
 if ($acao == 2) {
@@ -121,7 +77,7 @@ if ($acao == 2) {
         <div class="container">
 
             <div class="page-header">
-                <h1><i class="fa fa-shopping-cart"></i> Andamento da venda #<?php echo $idvenda; ?></h1>
+                <h1><i class="fa fa-shopping-cart"></i>Fornecimento</h1>
             </div>
 
             <?php
@@ -166,6 +122,13 @@ if ($acao == 2) {
                                     </div>
                                 </div>
 
+                                <div class="form-group row">
+                                    <div class="col-xs-4 ">
+                                        <label for="nomefornecedor">Fornecedor</label>
+                                        <input type="hidden" class="form-control" id="fornecedor" name="fornecedor" placeholder="ID" disabled >
+                                        <input type="text" class="form-control" id="nomefornecedor" name="nome_fornecedor" placeholder="Fornecedor do produto" >
+                                    </div>
+                                </div>
                                 <div class="col-xs-12 col-sm-3 col-md-2">
                                     <div class="form-group">
                                         <label for="fqtd">Quantidade</label>
@@ -175,10 +138,10 @@ if ($acao == 2) {
 
                                 <div class="col-xs-12 col-sm-3 col-md-2">
                                     <div class="form-group">
-                                        <label for="fpreco">Preço unitário</label>
+                                        <label for="fpreco">Custo Unitário</label>
                                         <div class="input-group">
                                             <span class="input-group-addon">R$</span>
-                                            <input type="text" class="form-control" id="fpreco" name="preco" required disabled="true">
+                                            <input type="text" class="form-control" id="fpreco" name="custoUnitario" required>
                                         </div>
                                     </div>
                                 </div>
@@ -228,8 +191,7 @@ Where (v.FK_pedido = :venda)";
                         }
 
                         $vendaTotal = 0;
-
-                            while ($produto = $result->fetchObject()) {
+                        while ($produto = $result->fetchObject()) {
                             $total = $produto->quantidade * $produto->valorUnitario;
                             $vendaTotal += $total;
                             ?>
@@ -300,14 +262,14 @@ Where (v.FK_pedido = :venda)";
         </div>
         <script></script>
         <script src="./lib/jquery.js"></script>
-        <script src="./lib/buscaPreco.js"></script>
-        
+        <script src="./lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+        <script src="./lib/autoComplete_fornecedor.js"></script>
         <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
-         <script>
-             if ($('#produtos tbody tr').length > 0){
-                $('#fechar').prop("disabled",false);
-             }
-         </script>
+        <script>
+            if ($('#produtos tbody tr').length > 0) {
+                $('#fechar').prop("disabled", false);
+            }
+        </script>
 
     </body>
 </html>
