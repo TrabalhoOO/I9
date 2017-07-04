@@ -1,5 +1,4 @@
 <?php
-
 require './protege.php';
 require './config.php';
 require './lib/funcoes.php';
@@ -9,162 +8,159 @@ $msgOk = array();
 $msgAviso = array();
 
 if (!isset($_GET['idvenda'])) {
-  header('location:vendas.php');
-  exit;
+    header('location:vendas.php');
+    exit;
 }
-
+$tipo = $_SESSION['tipo'];
+$idpessoa = $_SESSION['id_pessoa'];
 $idvenda = (int) $_GET['idvenda'];
-
-$sql = "Select
-	v.idvenda,
+if ($tipo == 'gerente') {
+    $sql = "Select
+	v.id_pedido,
 	v.data,
-	c.nome clienteNome,
-	u.nome usuarioNome
-From venda v
-Inner Join cliente c
-	On (c.idcliente = v.idcliente)
-Inner Join usuario u
-	On (u.idusuario = v.idusuario)
+        v.valorTotal,
+	p.nome clienteNome,
+        c.rua,cidade.cidade,
+        cidade.estado From pedido v Inner Join cliente c On (c.FK_pessoa = v.id_cli)
+ Inner Join pessoa p on(c.FK_pessoa = p.id_pessoa)
+Inner Join cidade on(c.FK_cidade = cidade.id_cidade)
 Where
-    (v.idvenda = $idvenda)
-    And (v.status = " . VENDA_FECHADA . ")";
-$consulta = mysqli_query($conn, $sql);
-$venda = mysqli_fetch_assoc($consulta);
-
-if (!$venda) {
-  header('location:vendas.php');
-  exit;
+    (v.id_pedido = $idvenda)
+    And (v.fechada = " . VENDA_FECHADA . ")";
+} elseif ($tipo == 'cliente') {
+    $sql = "Select
+	v.id_pedido,
+	v.data,
+        v.valorTotal,
+	p.nome clienteNome,
+        c.rua,cidade.cidade,
+        cidade.estado From pedido v Inner Join cliente c On (c.FK_pessoa = v.id_cli)
+ Inner Join pessoa p on(c.FK_pessoa = p.id_pessoa)
+Inner Join cidade on(c.FK_cidade = cidade.id_cidade)
+Where
+    (v.id_pedido = $idvenda)
+    And (v.fechada = " . VENDA_FECHADA . ") and "
+            . "(v.id_cli = :cliente)";
 }
-
+if ($stmt = $conn->prepare($sql)) {
+    if ($tipo == 'cliente') {
+        $stmt->bindParam(":cliente", $idpessoa);
+    }
+    $stmt->execute();
+}
+$venda = $stmt->fetchObject();
+if (!$venda) {
+    header('location:vendas.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Detalhes da venda</title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Detalhes da venda</title>
 
-    <?php headCss(); ?>
-  </head>
-  <body>
-      
-<?php
-        criarNav($_SESSION['tipo']);
-        
-        ?>
+        <?php headCss(); ?>
+    </head>
+    <body>
 
-<div class="container">
-
-<div class="page-header">
-  <h1><i class="fa fa-shopping-cart"></i> Detalhes da venda #<?php echo $idvenda; ?></h1>
-</div>
-
-<?php if ($msgOk) { msgHtml($msgOk, 'success'); } ?>
-<?php if ($msgAviso) { msgHtml($msgAviso, 'warning'); } ?>
-
-<div class="panel panel-primary">
-  <div class="panel-heading">
-    <h3 class="panel-title">Produtos da venda</h3>
-  </div>
-
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th>Qtd.</th>
-        <th>Produto</th>
-        <th>Preço unitário</th>
-        <th>Preço total</th>
-      </tr>
-    </thead>
-    <tbody>
         <?php
-        $sql = "Select
-	v.idproduto,
-	p.produto,
-	v.precopago,
-	v.qtd
-From vendaitem v
-Inner Join produto p
-	On (p.idproduto = v.idproduto)
-Where (v.idvenda = $idvenda)";
-        $consulta = mysqli_query($conn, $sql);
-        
-        $vendaTotal = 0;
-        
-        while($produto = mysqli_fetch_assoc($consulta)) {
-            $total = $produto['qtd'] * $produto['precopago'];
-            $vendaTotal += $total;
+        criarNav($_SESSION['tipo']);
         ?>
-      <tr>
-        <td><?php echo $produto['qtd']; ?></td>
-        <td><?php echo $produto['produto']; ?></td>
-        <td>R$ <?php echo number_format($produto['precopago'], 2, ',', '.'); ?></td>
-        <td>R$ <?php echo number_format($total, 2, ',', '.'); ?></td>
-      </tr>
-        <?php } ?>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th></th>
-        <th colspan="2">Total da venda</th>
-        <th>R$ <?php echo number_format($vendaTotal, 2, ',', '.'); ?></th>
-      </tr>
-    </tfoot>
-  </table>
-</div>
 
-<form class="form-horizontal" method="post" action="venda-fechar.php">
-<div class="panel panel-success">
-  <div class="panel-heading">
-    <h3 class="panel-title">Fechamento da venda</h3>
-  </div>
-  
-  <div class="panel-body">
-    
-    <div class="form-group">
-      <label for="fcliente" class="col-sm-2 control-label">Código:</label>
-      <div class="col-sm-2">
-        <p class="form-control-static"><?php echo $idvenda; ?></p>
-      </div>
-      
-      <label for="fcliente" class="col-sm-2 control-label">Data:</label>
-      <div class="col-sm-2">
-          <p class="form-control-static"><?php echo date('d/m/Y', strtotime($venda['data'])); ?></p>
-      </div>
-      
-      <label for="fcliente" class="col-sm-2 control-label">Total:</label>
-      <div class="col-sm-2">
-        <p class="form-control-static">R$ <?php echo number_format($vendaTotal, 2, ',', '.'); ?></p>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="fcliente" class="col-sm-2 control-label">Cliente:</label>
-      <div class="col-sm-4">
-        <p class="form-control-static"><?php echo $venda['clienteNome']; ?></p>
-      </div>
-      
-      <label for="fcliente" class="col-sm-2 control-label">CPF:</label>
-      <div class="col-sm-4">
-        <p class="form-control-static">{{CPF do cliente}}</p>
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label for="fcliente" class="col-sm-2 control-label">Vendedor:</label>
-      <div class="col-sm-4">
-        <p class="form-control-static"><?php echo $venda['usuarioNome']; ?></p>
-      </div>
-    </div>
-    
-  </div>
-</div>
-</form>
+        <div class="container">
 
-</div>
+            <div class="page-header">
+                <h1><i class="fa fa-shopping-cart"></i> Detalhes da venda #<?php echo $idvenda; ?></h1>
+            </div>
 
-<script src="./lib/jquery.js"></script>
-<script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+            <?php
+            if ($msgOk) {
+                msgHtml($msgOk, 'success');
+            }
+            ?>
+            <?php
+            if ($msgAviso) {
+                msgHtml($msgAviso, 'warning');
+            }
+            ?>
+             <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Detalhes do Cliente</h3>
 
-  </body>
+                </div>
+                <div class="panel-body">
+                    <div class="row col-lg-8">
+                        <h3 class="panel-title">Cliente: <?php echo $venda->clienteNome; ?></h3>
+                        <h3 class="panel-title">Rua: <?php echo $venda->rua; ?></h3>
+                    </div>
+                    <div class="row col-lg-4">
+                        <h3 class="panel-title">Cidade: <?php echo $venda->cidade; ?></h3>
+                        <h3 class="panel-title">Estado: <?php echo Estados($venda->estado); ?></h3>
+                    </div>
+                </div>
+             </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Produtos da venda</h3>
+
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Qtd.</th>
+                            <th>Produto</th>
+                            <th>Preço unitário</th>
+                            <th>Preço total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $itens = "Select
+	v.FK_estoqGlobal,
+	p.nome,
+	v.valorUnitario,
+	v.quantidade
+From itempedido v
+Inner Join produto_estoque p
+	On (p.id_produto = v.FK_estoqGlobal)
+Where (v.FK_pedido = $idvenda)";
+                        if ($stmt = $conn->prepare($itens)) {
+                            $stmt->execute();
+
+                            $vendaTotal = $venda->valorTotal;
+
+                            while ($produto = $stmt->fetchObject()) {
+                                $total = $produto->quantidade * $produto->valorUnitario;
+                                ?>
+                                <tr>
+                                    <td><?php echo $produto->quantidade; ?></td>
+                                    <td><?php echo $produto->nome; ?></td>
+                                    <td>R$ <?php echo number_format($produto->valorUnitario, 2, ',', '.'); ?></td>
+                                    <td>R$ <?php echo number_format($total, 2, ',', '.'); ?></td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Total da venda</th>
+                            <th>R$ <?php echo number_format($vendaTotal, 2, ',', '.'); ?></th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button type="button" class="btn btn-success hidden-print" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
+
+            </div>
+
+
+
+            <script src="./lib/jquery.js"></script>
+            <script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+
+    </body>
 </html>

@@ -30,7 +30,6 @@ if ($_POST) {
                 msgHtml("Email ou senha Inválidos");
             }
         }
-        $conn->close();
     }
     if ($tipo == "cliente") {
         $sql = "select * from cliente

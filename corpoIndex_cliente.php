@@ -7,12 +7,17 @@
                     <p>
                         <div class="btn-group">
                         <a class="btn btn-primary btn-lg" role="button" href="venda-nova.php">
-                            <i class="fa fa-plus fa-lg"></i>  Nova Compra
+                            <i class="fa fa-plus-circle fa-lg"></i>  Nova Compra
                         </a>
                     </div>
                     <div class="btn-group">
                         <a class="btn btn-primary btn-lg" role="button" href="vendas.php">
                             <i class="fa fa-search fa-lg"></i>  Compras Realizadas
+                        </a>
+                    </div>
+                    <div class="btn-group">
+                        <a class="btn btn-primary btn-lg" role="button" href="rel_vendas.php">
+                            <i class="fa fa-list fa-lg"></i>  Produtos Comprados
                         </a>
                     </div>
 

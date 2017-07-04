@@ -42,7 +42,7 @@ if ($_POST) {
             <div class="container">
 
                 <div class="page-header">
-                    <h1><i class="fa fa-user"></i> Cliente</h1>
+                    <h1><i class="fa fa-user"></i> Clientes</h1>
                 </div>
 
                 <div class="panel panel-default">
@@ -53,10 +53,11 @@ if ($_POST) {
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Nome</th>
+                                <th>CPF</th>
                                 <th>Telefone</th>
                                 <th>E-mail</th>
+                                <th>Endereço</th>
                                 <th>Ponto de Referência</th>
                                 <th>Cidade</th>
                                 <th>Estado</th>
@@ -65,23 +66,31 @@ if ($_POST) {
                         <tbody>
                             <?php
                             while ($cliente = $stmt->fetchObject()) {
+                                $cpf=$cliente->cpf;
+                                $parte_um = substr($cpf, 0, 3);
+                                $parte_dois = substr($cpf, 3, 3);
+                                $parte_tres = substr($cpf, 6, 3);
+                                $parte_quatro = substr($cpf, 9, 2);
+
+                                $cpf = "$parte_um.$parte_dois.$parte_tres-$parte_quatro";
                                 ?>
                                 <tr class="linha">
-                                    <td><?php echo $cliente->id_pessoa; ?></td>
                                     <td><?php echo $cliente->nome; ?></td>
+                                    <td><?php echo $cpf; ?></td>
                                     <td><?php echo $cliente->telefone; ?></td>
                                     <td><?php echo $cliente->email ?></td>
+                                    <td><?php echo $cliente->rua . ", " . $cliente->numero ?></td>
                                     <td><?php echo $cliente->ponto_ref_entrega ?></td>
                                     <td><?php echo $cliente->cidade ?></td>
                                     <td><?php echo Estados($cliente->estado) ?></td>
                                 </tr><?php
-                    }
-                }
+                            }
+                        }
                         ?>
                     </tbody>
                 </table>
             </div>
-            <button type="button" class="btn btn-success" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
+            <button type="button" class="btn btn-success hidden-print" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
         </div>
 
         <script src="./lib/jquery.js"></script>

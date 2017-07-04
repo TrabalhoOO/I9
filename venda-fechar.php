@@ -7,30 +7,40 @@ require './lib/conexao.php';
 
 // Pegar idvenda
 if (!isset($_SESSION['idvenda'])) {
-  header('location:vendas.php');
-  exit;
+    header('location:vendas.php');
+    exit;
 }
 $idvenda = $_SESSION['idvenda'];
 
 // Validar idvenda
-$sql = "Select idvenda
-From venda
+$sql = "Select id_pedido
+From pedido
 Where
-    (idvenda = $idvenda)
-    And (status = " . VENDA_ABERTA . ")";
-$consulta = mysqli_query($conn, $sql);
-$venda = mysqli_fetch_assoc($consulta);
+    (id_pedido = :pedido)
+    And (fechada = " . VENDA_ABERTA . ")";
+if ($stmt = $conn->prepare($sql)) {
+
+    $stmt->bindParam(":pedido", $idvenda);
+
+    $stmt->execute();
+    $venda = $stmt->fetchObject();
+}
 
 if (!$venda) {
-  header('location:vendas.php');
-  exit;
+    header('location:vendas.php');
+    exit;
 }
 
 // Fechar venda
-$sql = "Update venda Set status=" . VENDA_FECHADA
-        . " Where (idvenda = $idvenda)";
-mysqli_query($conn, $sql);
-unset($_SESSION['idvenda']);
 
+$sql = "Update pedido Set fechada=" . VENDA_FECHADA
+        . " Where (id_pedido = :pedido )";
+if ($stmt = $conn->prepare($sql)) {
+    $stmt->bindParam(":pedido", $idvenda);
+
+    $stmt->execute();
+    
+}
 // Redirecionar usuario para vendas.php
+unset($_SESSION['idvenda']);
 header('location:venda-detalhes.php?idvenda=' . $idvenda);

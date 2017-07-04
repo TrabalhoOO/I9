@@ -60,7 +60,7 @@ if ($_POST) {
         <div class="container">
 
             <div class="page-header">
-                <h1><i class="fa fa-headphones"></i> Cadastrar Produto</h1>
+                <h1><i class="fa fa-pencil"></i> Cadastrar Produto</h1>
             </div>
 
 
