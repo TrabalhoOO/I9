@@ -5,12 +5,14 @@
         <group>
             <file>file:/C:/wamp64/www/I9/corpoIndex_cliente.php</file>
             <file>file:/C:/wamp64/www/I9/rel-produtos.php</file>
+            <file>file:/C:/wamp64/www/I9/consulta_fornecedor.php</file>
             <file>file:/C:/wamp64/www/I9/produtos.php</file>
             <file>file:/C:/wamp64/www/I9/produtos-editar.php</file>
             <file>file:/C:/wamp64/www/I9/login.php</file>
             <file>file:/C:/wamp64/www/I9/venda-produto.php</file>
             <file>file:/C:/wamp64/www/I9/venda-fechar.php</file>
             <file>file:/C:/wamp64/www/I9/lib/funcoes.php</file>
+            <file>file:/C:/wamp64/www/I9/fornecimento.php</file>
             <file>file:/C:/wamp64/www/I9/nav_cliente.php</file>
             <file>file:/C:/wamp64/www/I9/rel_vendas.php</file>
             <file>file:/C:/wamp64/www/I9/vendas.php</file>
@@ -18,6 +20,7 @@
             <file>file:/C:/wamp64/www/I9/clientes.php</file>
             <file>file:/C:/wamp64/www/I9/corpoIndex.php</file>
             <file>file:/C:/wamp64/www/I9/index.php</file>
+            <file>file:/C:/wamp64/www/I9/fornecimento_produto.php</file>
             <file>file:/C:/wamp64/www/I9/produtos-cadastrar.php</file>
             <file>file:/C:/wamp64/www/I9/venda-continuar.php</file>
             <file>file:/C:/wamp64/www/I9/venda-nova.php</file>
