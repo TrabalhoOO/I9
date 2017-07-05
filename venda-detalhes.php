@@ -153,9 +153,9 @@ Where (v.FK_pedido = $idvenda)";
                         </tr>
                     </tfoot>
                 </table>
-                <button type="button" class="btn btn-success hidden-print" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
-
+                
             </div>
+<button type="button" class="btn btn-success hidden-print" onclick="window.print()"><span class="fa fa-print fa-lg"></span> Imprimir</button>
 
 
 

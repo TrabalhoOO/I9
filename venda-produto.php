@@ -92,10 +92,11 @@ VALUES
 if ($acao == 2) {
     $idproduto = (int) $_GET['idproduto'];
 
-    $sql = "Delete From itempedido Where (FK_estoqGlobal = :produto) LIMIT 1";
+    $sql = "Delete From itempedido Where (FK_estoqGlobal = :produto) and (FK_pedido = :venda) LIMIT 1";
     if ($stmt = $conn->prepare($sql)) {
 
         $stmt->bindParam(":produto", $idproduto);
+        $stmt->bindParam(":venda", $idvenda);
 
         $stmt->execute();
     }

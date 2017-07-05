@@ -49,7 +49,7 @@ if (isset($_GET['q'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "Select id_produto, qntd_total, custo_final, valor_sugerido, preco_venda,nome,descricao from produto_estoque where qntd_total < 5 order by nome ";
+                        $sql = "Select id_produto, qntd_total, custo_final, valor_sugerido, preco_venda,nome,descricao from produto_estoque where qntd_total <= 5 order by nome ";
 
 
                         if ($stmt = $conn->prepare($sql)) {
